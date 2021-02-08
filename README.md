@@ -7,8 +7,8 @@ My plan is to analyze the style in his albums over time and see/categorize how i
 
 A few typical tracks out of the corpus:
 Album Swimming (Addiction and depression, sad tone) 2018
-  -Self care (He raps about losing his mind here)
-  -Coming back to earth (Addiction)
+  - Self care (He raps about losing his mind here)
+  - Coming back to earth (Addiction)
   
 Album the divine Feminine(Love, happy/relaxed tone with more singing) 2016
   -We
@@ -17,5 +17,5 @@ Mixtape Macadelic (Album after his flop, Blue slide park, optimistic/hopeful ton
   - Thoughts from a balcony
   
 Album Kids (Smoking and partying, relaxed/happy tone) 2010
-  -Nikes on my feet 
-  -Kool aid and frozen pizza 
+  - Nikes on my feet 
+  - Kool aid and frozen pizza 
