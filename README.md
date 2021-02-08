@@ -11,7 +11,7 @@ Album Swimming (Addiction and depression, sad tone) 2018
   - Coming back to earth (Addiction)
   
 Album the divine Feminine(Love, happy/relaxed tone with more singing) 2016
-  -We
+  - We
   
 Mixtape Macadelic (Album after his flop, Blue slide park, optimistic/hopeful tone) 2012
   - Thoughts from a balcony
