@@ -19,4 +19,4 @@ Mixtape Macadelic (Album after his flop, Blue slide park, optimistic/hopeful ton
 Album Kids (Smoking and partying, relaxed/happy tone) 2010
   - Nikes on my feet 
   - Kool aid and frozen pizza 
-blalbla
+line from rstudio test
