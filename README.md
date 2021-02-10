@@ -3,7 +3,7 @@ portofolio
 
 My corpus will be containing several albums of Mac Miller which should be around 100 tracks. What is interesting about this corpus is that his music evolved a lot from his first album to his last. Over time he opens up more and his music changes with him. At the start of his career he creates happy and typical party rap tracks, over time this changes to more serious topics like depression(his last album before his death). At some point he also starts singing more and produces more jazz-like tracks.
 
-My plan is to analyze the style in his albums over time and see/categorize how it changes over time, for example difference rap/singing and change of tone in different albums.
+My plan is to analyze the style in his albums by using the spotify feature valence on his tracks and see if spotify classifies them the same as i do: from a happy tone to a more sad tone up until his last album.
 
 A few typical tracks out of the corpus:
 Album Swimming (Addiction and depression, sad tone) 2018
