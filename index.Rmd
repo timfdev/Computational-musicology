@@ -63,7 +63,7 @@ Album Kids (Smoking and partying, relaxed/happy tone) 2010
 ```
 
 
-```{r echo=FALSE, fig.width=10}
+```{r echo=FALSE}
 all_albums <- Album1 %>%
   mutate(album_name="Swimming") %>%
   bind_rows(Album2 %>% mutate(album_name="Macadelic")) %>%
@@ -139,4 +139,4 @@ ggplotly(feature_distribution)
 According to spotify, the valence feature is a measure of happiness. Therefore, I will zoom in on the average valence per album. We can see that from the first album the average valence is dropping until the album: "The Divine Feminime". This makes sense because he made this album with his girlfriend Ariana Grande. After this album and their break up Mac Miller struggled with mental issues and this does show in his albums after "The Divine Feminime."
 
 ### Discussion
-This analysis shows the mental rollercoaster of Mac Miller, it is not completely unbiased however. It does include all his albums and two mixtapes but it does not include all his music over his entire career. The reason for this is that not all his albums are available on spotify. We can certainly conclude that his last two albums  leading up to his death were of a more depressed ton.
+This analysis shows the mental rollercoaster of Mac Miller, it is not completely unbiased however. It does include all his albums and two mixtapes but it does not include all his music over his entire career. The reason for this is that not all his albums are available on spotify. We can certainly conclude that his last two albums  leading up to his death were of a more depressed tone.
