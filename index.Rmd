@@ -18,8 +18,8 @@ library(plotly)
 ```
 
 
-Introduction
-=====================================
+### Introduction
+
 My corpus will be containing several albums of Mac Miller which should be around 100 tracks. What is interesting about this corpus is that his music evolved a lot from his first album to his last. Over time he opens up more and his music changes with him. At the start of his career he creates happy and typical party rap tracks, over time this changes to more serious topics like depression(his last album before his death). At some point he also starts singing more and produces more jazz-like tracks.
 
 My plan is to make a timeline of his musical career and analyze how it progressed over the years. Mac miller was struggling with mental issues leading up to his death. Does this show in his music? I will be looking at valence, energy and danceability to classify his albums from sad to happy and observe how his music changed.
@@ -42,8 +42,7 @@ Album Kids (Smoking and partying, relaxed/happy tone) 2010
     Nikes on my feet
     Kool aid and frozen pizza test
 
-Visualisation
-=====================================
+### Visualisation
 ```{r Plot, echo=FALSE}
   #Swimming
   Album1 <- get_playlist_audio_features("", "0LGaHnLkACbfrYgJ3XhRHV")
@@ -64,10 +63,8 @@ Visualisation
 ```
 
 
-
-### Plot1
 ```{r echo=FALSE, fig.width=10}
- all_albums <- Album1 %>%
+all_albums <- Album1 %>%
   mutate(album_name="Swimming") %>%
   bind_rows(Album2 %>% mutate(album_name="Macadelic")) %>%
   bind_rows(Album3 %>% mutate(album_name="KIDS")) %>%
@@ -79,25 +76,67 @@ Visualisation
   mutate(album_name = fct_relevel(album_name, "KIDS", "BlueSlidePark",
                            "Macadelic", "WatchingMovies\nWithTheSoundOff",
                            "GO:ODAM", "DivineFeminime", "Swimming", "Circles"))
-
-ggplot(all_albums, aes(x=album_name, y=valence, color=album_name)) +
-  geom_boxplot() +
-  labs(title="The valence distribution of every album",
-       x="Albums", y= "Valence")
-
 ```
-
-
-### Plot2
-```{r echo=FALSE, fig.width=10}
-ggplot(all_albums, aes(x=danceability, y=energy, color=album_name)) +
+ 
+```{r echo=FALSE} 
+feature_distribution <- ggplot(all_albums, 
+    aes(
+      x=danceability, 
+      y=valence, 
+      color=album_name,
+      size=energy, 
+      label=track.name,
+      alpha=0.8
+      )
+    ) +
   geom_point() +
-  labs(title="The valence distribution of every album",
-       x="Danceability", y= "Energy")
+  labs(title="The valence, danceability and energy distribution of every album",
+       x="Danceability", 
+       y= "Valence"
+       ) +
+  facet_wrap(~album_name) +
+  scale_x_continuous(
+    limits = c(0,1),
+    breaks = c(0.0,0.25,0.50,0.75,1)
+  ) +
+  scale_y_continuous(
+    limits = c(0,1),
+    breaks = c(0.0,0.25,0.50,0.75,1)
+  ) +
+  scale_size_continuous(
+    range=c(1,6)
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+ggplotly(feature_distribution)
 ```
+***
 
+In this graph we plot the valence against the danceability in an interactive plot with the energy of a track mapped to size. The albums are in chronological order from left to right. We can see in the plots that the style in albums differs a lot. Mac Millers' first albums are classified as more happy and danceable by spotify.
 
+### Visualisation of averages
+```{r echo=FALSE}
+feature_distribution <- ggplot(all_albums, 
+    aes(
+      x=album_name, 
+      y=valence, 
+      color=album_name,
+      label=track.name,
+      alpha=0.8
+      )
+    ) +
+  geom_boxplot() +
+  labs(title="The valence distribution per album",
+       x="Album", 
+       y= "Valence"
+       ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+ggplotly(feature_distribution)
+```
+***
 
-Discussion
-=====================================
+According to spotify, the valence feature is a measure of happiness. Therefore, I will zoom in on the average valence per album. We can see that from the first album the average valence is dropping until the album: "The Divine Feminime". This makes sense because he made this album with his girlfriend Ariana Grande. After this album and their break up Mac Miller struggled with mental issues and this does show in his albums after "The Divine Feminime."
 
+### Discussion
+This analysis shows the mental rollercoaster of Mac Miller, it is not completely unbiased however. It does include all his albums and two mixtapes but it does not include all his music over his entire career. The reason for this is that not all his albums are available on spotify. We can certainly conclude that his last two albums  leading up to his death were of a more depressed ton.
