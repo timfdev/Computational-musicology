@@ -15,6 +15,7 @@ library(spotifyr)
 library(usethis)
 library(flexdashboard)
 library(plotly)
+library(compmus)
 ```
 
 
@@ -50,7 +51,7 @@ Album Kids (Smoking and partying, relaxed/happy tone) 2010
     Nikes on my feet
     Kool aid and frozen pizza test
 
-### Visualisation
+### Visualisation of valence,danceability and energy per album
 ```{r Plot, echo=FALSE}
   #Swimming
   Album1 <- get_playlist_audio_features("", "0LGaHnLkACbfrYgJ3XhRHV")
@@ -86,7 +87,7 @@ all_albums <- Album1 %>%
                            "GO:ODAM", "DivineFeminime", "Swimming", "Circles"))
 ```
  
-```{r echo=FALSE} 
+```{r echo=FALSE, fig.width} 
 feature_distribution <- ggplot(all_albums, 
     aes(
       x=danceability, 
@@ -98,11 +99,11 @@ feature_distribution <- ggplot(all_albums,
       )
     ) +
   geom_point() +
-  labs(title="The valence, danceability and energy distribution of every album",
+  labs(title="The valence plotted against the danceability with energy mapped to size",
        x="Danceability", 
        y= "Valence"
        ) +
-  facet_wrap(~album_name) +
+  facet_wrap(~album_name, scales="free_x") +
   scale_x_continuous(
     limits = c(0,1),
     breaks = c(0.0,0.25,0.50,0.75,1)
@@ -122,14 +123,18 @@ ggplotly(feature_distribution)
 
 In this graph we plot the valence against the danceability in an interactive plot with the energy of a track mapped to size. The albums are in chronological order from left to right. We can see in the plots that the style in albums differs a lot. Mac Millers' first albums are classified as more happy and danceable by spotify.
 
-### Visualisation of averages
+*(For some reason ggplotly removes the axis labels. You can see them if minimize your window. The same bug is on dr Burgoyne's portofolio.)*
+
+### Visualisation of valence per album
 ```{r echo=FALSE}
+max_val = all_albums[which.max(all_albums$valence),]
+min_val = all_albums[which.min(all_albums$valence),]
+
 feature_distribution <- ggplot(all_albums, 
     aes(
       x=album_name, 
       y=valence, 
       color=album_name,
-      label=track.name,
       alpha=0.8
       )
     ) +
@@ -144,7 +149,13 @@ ggplotly(feature_distribution)
 ```
 ***
 
-According to spotify, the valence feature is a measure of happiness. Therefore, I will zoom in on the average valence per album. We can see that from the first album the average valence is dropping until the album: "The Divine Feminime". This makes sense because he made this album with his girlfriend Ariana Grande. After this album and their break up Mac Miller struggled with mental issues and this does show in his albums after "The Divine Feminime."
+According to spotify, the valence feature is a measure of happiness. Therefore, I will zoom in on the average valence per album. We can see that from the first album the average valence is dropping until the album: "The Divine Feminime". This makes sense because he made this album with his girlfriend Ariana Grande. After this album and their break up Mac Miller struggled with mental issues and this does show in his albums after "The Divine Feminime.".\
+Furthermore, the track with the highest valence is:\
+- "`r max_val$track.name`" from "`r max_val$album_name`".\
+
+The track with the lowest valence is:\
+- "`r min_val$track.name`" from "`r min_val$album_name`".\
+In the next visualization page, these tracks will be further analyzed.
 
 ### Zooming in on a track
 
