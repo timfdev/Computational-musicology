@@ -127,9 +127,6 @@ In this graph we plot the valence against the danceability in an interactive plo
 
 ### Visualisation of valence per album
 ```{r echo=FALSE}
-max_val = all_albums[which.max(all_albums$valence),]
-min_val = all_albums[which.min(all_albums$valence),]
-
 feature_distribution <- ggplot(all_albums, 
     aes(
       x=album_name, 
@@ -147,11 +144,20 @@ feature_distribution <- ggplot(all_albums,
   theme(legend.position = "none")
 ggplotly(feature_distribution)
 ```
+
+```{r echo=FALSE}
+max_val <- all_albums %>%
+  top_n(2, valence)
+min_val = all_albums[which.min(all_albums$valence),]
+min_val$track.name
+min_val$album_name
+```
+
 ***
 
-According to spotify, the valence feature is a measure of happiness. Therefore, I will zoom in on the average valence per album. We can see that from the first album the average valence is dropping until the album: "The Divine Feminime". This makes sense because he made this album with his girlfriend Ariana Grande. After this album and their break up Mac Miller struggled with mental issues and this does show in his albums after "The Divine Feminime.".\
+According to spotify, the valence feature is a measure of happiness. Therefore, I will zoom in on the average valence per album. We can see that from the first album the average valence is dropping until the album: "The Divine Feminime". This makes sense because he made this album with Ariana Grande, his girlfriend at the time. In this relationship he was visually in a good mental state, after their break up Mac Miller struggled with mental issues and this does show in his albums after "The Divine Feminime.".\
 Furthermore, the track with the highest valence is:\
-- "`r max_val$track.name`" from "`r max_val$album_name`".\
+- "`r max_val$track.name[2]`" from "`r max_val$album_name[2]`".\
 
 The track with the lowest valence is:\
 - "`r min_val$track.name`" from "`r min_val$album_name`".\
@@ -159,6 +165,60 @@ In the next visualization page, these tracks will be further analyzed.
 
 ### Zooming in on a track
 
+```{r echo=FALSE}
+max_track <-
+  get_tidy_audio_analysis("7rdyAfIm1t6h6I1gyLtD17") %>%
+  select(segments) %>%
+  unnest(segments) %>%
+  select(start, duration, pitches)
+max_track %>%
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) %>%
+  compmus_gather_chroma() %>% 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  ggtitle("Chroma of the song 'Clubhouse' from the album 'GO:ODAM'") +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+
+```
+
+***
+The track with the highest valence is actually "Mad Flava, Heavy Flow" fom the album "KIDS" but since this track is merely an interlude, the track with the second highest valence is observed in a chroma.
+
+### Zooming in on a track 2
+
+```{r echo=FALSE}
+min_track <-
+  get_tidy_audio_analysis("3R8CyhJfVjvgIROd5RSGhQ") %>%
+  select(segments) %>%
+  unnest(segments) %>%
+  select(start, duration, pitches)
+min_track %>%
+  mutate(pitches = map(pitches, compmus_normalise, "euclidean")) %>%
+  compmus_gather_chroma() %>% 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  ggtitle("Chroma of the song  'I can see' from the album 'Circles'") +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+
+```
 
 ### Discussion
-This analysis shows the mental rollercoaster of Mac Miller, it is not completely unbiased however. It does include all his albums and two mixtapes but it does not include all his music over his entire career. The reason for this is that not all his albums are available on spotify. We can certainly conclude that his last two albums  leading up to his death were of a more depressed tone.
+This analysis shows the mental rollercoaster of Mac Miller, it is not completely unbiased however. It does include all his albums and two mixtapes but it does not include all his music over his entire career. The reason for this is that not all his mixtapes are available on spotify. We can certainly conclude that his last two albums  leading up to his death were of a more depressed tone.
