@@ -1,7 +1,7 @@
 ---
 title: "Portfolio Mac Miller"
 author: "Tim Frohlich"
-date: "2/15/2021"
+date: "March 2021"
 output: 
   flexdashboard::flex_dashboard:
     css: portfolio.css
@@ -19,8 +19,11 @@ library(plotly)
 library(compmus)
 ```
 
-### Introduction
+<script src="../../R/x86_64-pc-linux-gnu-library/3.4/crosstalk/lib/jquery/jquery.js"></script>
 
+### Introduction {data-commentary-width=400}
+
+<div id="text">
 The corpus for this portofolio will be containing several albums of Mac Miller which results in a total of 122 tracks over the time period 2010-2020. Each album is collected from public spotify playlists. What is interesting about this corpus is that his music evolved a lot from his first album to his last. Over time he opens up more and his music changes with him. At the start of his career I feel like he created happy and typical party rap tracks, over time this changes to more serious topics like depression(his last album before his death). At some point he also starts singing more and produces more jazz-like tracks.
 
 I will analyze the timeline of his musical career and observe how it progressed over the years. Mac miller was struggling with mental issues leading up to his death. Does this show in his music? I will be looking at valence, energy and danceability to classify his albums emotionally and observe how his music changed.
@@ -50,10 +53,9 @@ Album Kids (Smoking and partying, relaxed/happy tone) 2010
 
     Nikes on my feet
     Kool aid and frozen pizza test
+</div>
 
 ***
-
-<script src="../../R/x86_64-pc-linux-gnu-library/3.4/crosstalk/lib/jquery/jquery.js"></script>
 
 <div id="slideshow">
   <div>
@@ -74,22 +76,47 @@ Album Kids (Smoking and partying, relaxed/happy tone) 2010
 $("#slideshow > div").hide();
 $(document).ready(function(){
   $("#slideshow > div:first").fadeIn(1000);
+  $('#text').slideDown(2000);
 });
-$(fade);
+fade();
+
 
 
 function fade(){
 $("#slideshow > div:gt(0)").hide();
-
 setInterval(function() {
-  $('#slideshow > div:first')
-    .fadeOut(1000)
-    .next()
-    .fadeIn(1000)
-    .end()
-    .appendTo('#slideshow');
-}, 3000);
+$('#slideshow > div:first')
+.fadeOut(2000)
+.next()
+.fadeIn(2000)
+.end()
+.appendTo('#slideshow');
+}, 4000);
 };
+
+<!-- function fade2(){ -->
+<!-- var colors = ["#000000", "#9cc3d5ff", '#800080', '#9cc3d5ff']; -->
+<!-- var counter = 0; -->
+<!-- if (counter < 4){    -->
+<!--   counter++; -->
+<!-- } else{ -->
+<!--   counter = 0; -->
+<!-- } -->
+
+<!-- setInterval(function() { -->
+<!-- var p = $("#slideshow").style.backgroundColor = colors[counter]; -->
+<!-- p.queue function() { -->
+<!--   $("#slideshow").fadeOut(2000) -->
+<!--   $("#slideshow").style.backgroundColor = colors[counter]; -->
+<!-- } -->
+
+
+<!-- .fadeIn(2000) -->
+<!-- .end() -->
+<!-- .appendTo('#slideshow'); -->
+<!-- }, 4000); -->
+<!-- }; -->
+
 ```
 
 ### Visualisation of valence,danceability and energy per album
