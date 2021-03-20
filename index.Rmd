@@ -1,11 +1,12 @@
 ---
-title: "Portofolio computational musicology"
+title: "Portfolio Mac Miller"
 author: "Tim Frohlich"
 date: "2/15/2021"
 output: 
   flexdashboard::flex_dashboard:
+    css: portfolio.css
     storyboard: true
-    theme: yeti
+    theme: "default"
 ---
 
 ```{r setup, include=FALSE}
@@ -17,34 +18,6 @@ library(flexdashboard)
 library(plotly)
 library(compmus)
 ```
-
-### Comparing High valence with low valence in tempograms
-
-```{r echo=FALSE, out.width="50%"}
-clubhouse <- get_tidy_audio_analysis("6PJasPKAzNLSOzxeAH33j2")
-
-clubhouse %>%
-  tempogram(window_size = 4, hop_size = 2, cyclic = TRUE) %>%
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)", title="The track with the highest valence: 'Clubhouse'") +
-  theme_classic()
-  
-icansee <- get_tidy_audio_analysis("3R8CyhJfVjvgIROd5RSGhQ")
-
-icansee %>%
-  tempogram(window_size = 4, hop_size = 2, cyclic = TRUE) %>%
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)", title="The track with the lowest valence: 'I can see'") +
-  theme_classic()
-```
-
-***
-
-Comparing the track with the highest valence("clubhouse") with the track that has the lowest valence("I can see"). You would expect that 'clubhouse' has a higher BPM than 'I can see'. We can see that this statement is true for these particular tracks. 'clubhouse' has a BPM of a little over 120 with spikes up to 160 BPM, while 'i can see' has a BPM of a little under 120 throughout the track. Which makes sense because spotify probably uses BPM calculations among other things to classify a tracks' valence.
 
 ### Introduction
 
@@ -78,7 +51,49 @@ Album Kids (Smoking and partying, relaxed/happy tone) 2010
     Nikes on my feet
     Kool aid and frozen pizza test
 
+***
+
+<script src="../../R/x86_64-pc-linux-gnu-library/3.4/crosstalk/lib/jquery/jquery.js"></script>
+
+<div id="slideshow">
+  <div>
+  <img src="macmiller.gif" id="mac">
+  </div>
+  <div>
+  <img src="macmiller2.gif" id="mac">
+  </div>
+  <div>
+  <img src="macmiller3.gif" id="mac">
+  </div>
+  <div>
+  <img src="macmiller4.jpg" id="mac">
+  </div>
+</div>  
+
+```{js echo=FALSE}
+$("#slideshow > div").hide();
+$(document).ready(function(){
+  $("#slideshow > div:first").fadeIn(1000);
+});
+$(fade);
+
+
+function fade(){
+$("#slideshow > div:gt(0)").hide();
+
+setInterval(function() {
+  $('#slideshow > div:first')
+    .fadeOut(1000)
+    .next()
+    .fadeIn(1000)
+    .end()
+    .appendTo('#slideshow');
+}, 3000);
+};
+```
+
 ### Visualisation of valence,danceability and energy per album
+
 ```{r Plot, echo=FALSE}
   #Swimming
   Album1 <- get_playlist_audio_features("", "0LGaHnLkACbfrYgJ3XhRHV")
@@ -113,21 +128,21 @@ all_albums <- Album1 %>%
                            "Macadelic", "WatchingMovies\nWithTheSoundOff",
                            "GO:ODAM", "DivineFeminime", "Swimming", "Circles"))
 ```
- 
-```{r echo=FALSE, fig.width} 
-feature_distribution <- ggplot(all_albums, 
+
+```{r echo=FALSE, fig.width}
+feature_distribution <- ggplot(all_albums,
     aes(
-      x=danceability, 
-      y=valence, 
+      x=danceability,
+      y=valence,
       color=album_name,
-      size=energy, 
+      size=energy,
       label=track.name,
       alpha=0.8
       )
     ) +
   geom_point() +
   labs(title="The valence plotted against the danceability with energy mapped to size",
-       x="Danceability", 
+       x="Danceability",
        y= "Valence"
        ) +
   facet_wrap(~album_name, scales="free_x") +
@@ -154,17 +169,17 @@ In this graph we plot the valence against the danceability in an interactive plo
 
 ### Visualisation of valence per album
 ```{r echo=FALSE}
-feature_distribution <- ggplot(all_albums, 
+feature_distribution <- ggplot(all_albums,
     aes(
-      x=album_name, 
-      y=valence, 
+      x=album_name,
+      y=valence,
       color=album_name,
       alpha=0.8
       )
     ) +
   geom_boxplot() +
   labs(title="The valence distribution per album",
-       x="Album", 
+       x="Album",
        y= "Valence"
        ) +
   theme_minimal() +
@@ -178,16 +193,17 @@ max_val <- all_albums %>%
 min_val = all_albums[which.min(all_albums$valence),]
 min_val$track.name
 min_val$album_name
+
 ```
 
 ***
 
 According to spotify, the valence feature is a measure of happiness. Therefore, I will zoom in on the average valence per album. We can see that from the first album the average valence is dropping until the album: "The Divine Feminime". This makes sense because he made this album with Ariana Grande, his girlfriend at the time. In this relationship he was visually in a good mental state, after their break up Mac Miller struggled with mental issues and this does show in his albums after "The Divine Feminime.".\
 Furthermore, the track with the highest valence is:\
-- "`r max_val$track.name[2]`" from "`r max_val$album_name[2]`".\
+
 
 The track with the lowest valence is:\
-- "`r min_val$track.name`" from "`r min_val$album_name`".\
+
 In the next visualization page, these tracks will be further analyzed.
 
 ### Zooming in on a track
@@ -200,7 +216,7 @@ max_track <-
   select(start, duration, pitches)
 max_track %>%
   mutate(pitches = map(pitches, compmus_normalise, "euclidean")) %>%
-  compmus_gather_chroma() %>% 
+  compmus_gather_chroma() %>%
   ggplot(
     aes(
       x = start + duration / 2,
@@ -230,7 +246,7 @@ min_track <-
   select(start, duration, pitches)
 min_track %>%
   mutate(pitches = map(pitches, compmus_normalise, "euclidean")) %>%
-  compmus_gather_chroma() %>% 
+  compmus_gather_chroma() %>%
   ggplot(
     aes(
       x = start + duration / 2,
@@ -249,8 +265,6 @@ min_track %>%
 
 ### Investigating structure with the chroma feature
 ```{r echo=FALSE}
-#Clubhouse, Goodam, 7rdyAfIm1t6h6I1gyLtD17
-#I can see, Circles, 3R8CyhJfVjvgIROd5RSGhQ
 bzt <-
   get_tidy_audio_analysis("7rdyAfIm1t6h6I1gyLtD17") %>%
   compmus_align(bars, segments) %>%
@@ -262,7 +276,7 @@ bzt <-
         compmus_summarise, pitches,
         method = "acentre", norm = "manhattan"
       )
-  ) 
+  )
 bzt2 <-
   get_tidy_audio_analysis("3R8CyhJfVjvgIROd5RSGhQ") %>%
   compmus_align(bars, segments) %>%
@@ -274,16 +288,16 @@ bzt2 <-
         compmus_summarise, pitches,
         method = "acentre", norm = "manhattan"
       )
-  ) 
+  )
   bind_rows(
-  bzt %>% 
-    compmus_self_similarity(pitches, "aitchison") %>% 
-    mutate(d = d / max(d), type = "Clubhouse"), 
+  bzt %>%
+    compmus_self_similarity(pitches, "aitchison") %>%
+    mutate(d = d / max(d), type = "Clubhouse"),
   bzt2 %>%
-    compmus_self_similarity(pitches, "aitchison") %>% 
+    compmus_self_similarity(pitches, "aitchison") %>%
     mutate(d = d / max(d), type = "I can see")
   ) %>%
-  mutate() %>% 
+  mutate() %>%
   ggplot(
     aes(
       x = xstart + xduration / 2,
@@ -297,7 +311,7 @@ bzt2 <-
   coord_fixed() +
   facet_wrap(~type) +
   scale_fill_viridis_c(option = "E", guide = "none") +
-  theme_classic() + 
+  theme_classic() +
   labs(x = "", y = "")
 ```
 
@@ -306,8 +320,7 @@ Here we compare the track with the highest valence("clubhouse") with the track t
 
 ### Investigating structure with the timbre feature
 ```{r echo=FALSE}
-#Clubhouse, Goodam, 7rdyAfIm1t6h6I1gyLtD17
-#I can see, Circles, 3R8CyhJfVjvgIROd5RSGhQ
+
 bzt <-
   get_tidy_audio_analysis("7rdyAfIm1t6h6I1gyLtD17") %>%
   compmus_align(bars, segments) %>%
@@ -333,14 +346,14 @@ bzt2 <-
       )
   )
   bind_rows(
-  bzt %>% 
-    compmus_self_similarity(timbre, "euclidean") %>% 
-    mutate(d = d / max(d), type = "Clubhouse"), 
+  bzt %>%
+    compmus_self_similarity(timbre, "euclidean") %>%
+    mutate(d = d / max(d), type = "Clubhouse"),
   bzt2 %>%
-    compmus_self_similarity(timbre, "euclidean") %>% 
+    compmus_self_similarity(timbre, "euclidean") %>%
     mutate(d = d / max(d), type = "I can see")
   ) %>%
-  mutate() %>% 
+  mutate() %>%
   ggplot(
     aes(
       x = xstart + xduration / 2,
@@ -354,14 +367,14 @@ bzt2 <-
   coord_fixed() +
   facet_wrap(~type) +
   scale_fill_viridis_c(option = "E", guide = "none") +
-  theme_classic() + 
+  theme_classic() +
   labs(x = "", y = "")
 ```
 
 ***
 Here we compare the track with the highest valence("clubhouse") with the track that has the lowest valence("I can see") with timbre based self-similarity matrix. In the first matrix we can see a distinct sound represented by the yellow edge on the plot. "Clubhouse" starts indeed with a buzzer sound and around the 70 second mark there is a scratch in the track which can be seen in the plot. The plot of "I can see" shows the chorus clearly because of its distinct sound. The chorus at 150 second mark is very clear for example.
 
-### Chordogram on the happiest song in the corpus 
+### Chordogram on the happiest song in the corpus
 
 ```{r echo=FALSE}
 circshift <- function(v, n) {
@@ -465,7 +478,7 @@ twenty_five <-
         method = "mean", norm = "manhattan"
       )
   )
-twenty_five %>% 
+twenty_five %>%
   compmus_match_pitch_template(
     key_templates,         # Change to chord_templates if descired
     method = "manhattan",  # Try different distance metrics
@@ -484,6 +497,35 @@ twenty_five %>%
 
 This chordogram is about Clubhouse, the happiest Mac Miller song according to spotify. In this song (and Mac Miller songs in general) there aren't any abrupt key changes which is usually the case in rap, so that's why the chordogram is very structured and you can't really draw any conclusions. One thing that does stand out is the intro sound, which kind of sounds like an alarm.
 
+### Comparing High valence with low valence in tempograms
+
+```{r echo=FALSE, out.width="50%"}
+clubhouse <- get_tidy_audio_analysis("6PJasPKAzNLSOzxeAH33j2")
+
+clubhouse %>%
+  tempogram(window_size = 4, hop_size = 2, cyclic = TRUE) %>%
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)", title="The track with the highest valence: 'Clubhouse'") +
+  theme_classic()
+
+icansee <- get_tidy_audio_analysis("3R8CyhJfVjvgIROd5RSGhQ")
+
+icansee %>%
+  tempogram(window_size = 4, hop_size = 2, cyclic = TRUE) %>%
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)", title="The track with the lowest valence: 'I can see'") +
+  theme_classic()
+```
+
+***
+
+Comparing the track with the highest valence("clubhouse") with the track that has the lowest valence("I can see"). You would expect that 'clubhouse' has a higher BPM than 'I can see'. We can see that this statement is true for these particular tracks. 'clubhouse' has a BPM of a little over 120 with spikes up to 160 BPM, while 'i can see' has a BPM of a little under 120 throughout the track. Which makes sense because spotify probably uses BPM calculations among other things to classify a tracks' valence.
+
 ### Discussion
+
 This analysis shows the mental rollercoaster of Mac Miller, it is not completely unbiased however. It does include all his albums and two mixtapes but it does not include all his music over his entire career. The reason for this is that not all his mixtapes are available on spotify. We can certainly conclude that his last two albums  leading up to his death were of a more depressed tone.
 
