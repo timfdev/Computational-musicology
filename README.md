@@ -1,5 +1,5 @@
 # Computational-musicology
-portofolio
+link to portofolio: https://timfuva.github.io/Computational-musicology
 
 My corpus will be containing several albums of Mac Miller which should be around 100 tracks. What is interesting about this corpus is that his music evolved a lot from his first album to his last. Over time he opens up more and his music changes with him. At the start of his career he creates happy and typical party rap tracks, over time this changes to more serious topics like depression(his last album before his death). At some point he also starts singing more and produces more jazz-like tracks.
 
